@@ -1,7 +1,11 @@
 import { test, request, expect } from '@playwright/test';
-const loginPayload = { email: "customer2@practicesoftwaretesting.com", password: "welcome01" }
-const orderPayload = { product_id: "01HW4ZG8550TCQ5D60RE89S7SM", quantity: 1 }
+import * as loginPayload from '../req-jsons/loginPayload.json';
+import * as cartPayloadData from '../req-jsons/cartPayload.json';
+import path from 'path';
+import fs from 'fs/promises';
 let token, cartId;
+
+let cartPayload = { ...cartPayloadData };
 
 test.describe('Example Test Suite', () => {
 
@@ -19,18 +23,29 @@ test.describe('Example Test Suite', () => {
         token = loginResponseJson.access_token;
         console.log(loginResponseJson);
 
-        //Get user's details
-        const response = await apiContext.get("https://api.practicesoftwaretesting.com/users/me",
+        //Get product id
+        const productDetailsResponse = await apiContext.get("https://api.practicesoftwaretesting.com/products?between=price,1,100&page=1",
             {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
-                }
+                },
+                data: loginPayload
             }
         )
-        expect.soft(response.status()).toBe(200);
-        const body = await response.json();
-        console.log(JSON.stringify(body));
+        expect(loginResponse.ok()).toBeTruthy();
+        const productDetailsResponseJson = await productDetailsResponse.json();
+        const product_name = productDetailsResponseJson.data[0].name;
+        const product_id = productDetailsResponseJson.data[0].id;
+        console.log('product_name : ' + product_name);
+        console.log('product_id : ' + product_id);
+
+        cartPayload.product_id = product_id;
+        const filePath = path.join(__dirname, "../req-jsons", "cartPayload.json");
+        const existingData = await fs.readFile(filePath, 'utf-8');
+        const existingPayload = JSON.parse(existingData);
+        existingPayload.product_id = product_id;
+        await fs.writeFile(filePath, JSON.stringify(existingPayload, null, 2));
 
         //Create cart
         const cartResponse = await apiContext.post("https://api.practicesoftwaretesting.com/carts",
@@ -45,10 +60,12 @@ test.describe('Example Test Suite', () => {
         cartId = cartResponseJson.id;
         console.log(cartResponseJson);
 
+        console.log('cart payload : ' + cartPayload);
+
         //Add to Cart
         const orderResponse = await apiContext.post(`https://api.practicesoftwaretesting.com/carts/${cartId}`,
             {
-                data: orderPayload,
+                data: cartPayload,
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
@@ -59,7 +76,7 @@ test.describe('Example Test Suite', () => {
         console.log(orderResponseJson);
     });
 
-    test('Load cart', async ({ page }) => {
+    test('Verify item price in cart', async ({ page }) => {
         page.addInitScript(value => {
             window.localStorage.setItem('auth-token', value);
         }, token);
@@ -71,6 +88,7 @@ test.describe('Example Test Suite', () => {
             window.sessionStorage.setItem('cart_quantity', value);
         }, '1');
         await page.reload();
-        await page.pause();
+        await expect.soft(page.locator('//tbody/tr/td[4]/span[1]')).toContainText('$14.15');
+        //await page.pause();
     });
 });
