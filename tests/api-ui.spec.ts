@@ -1,5 +1,4 @@
 import { test, request, expect } from '@playwright/test';
-import * as loginPayload from '../req-jsons/loginPayload.json';
 import * as cartPayloadData from '../req-jsons/cartPayload.json';
 import path from 'path';
 import fs from 'fs/promises';
