@@ -33,6 +33,29 @@ export default defineConfig({
 
   /* Configure projects for major browsers */
   projects: [
+
+    // {
+    //   name: 'chromium',
+    //   use: { ...devices['Desktop Chrome'] },
+    // },
+
+    // {
+    //   name: 'firefox',
+    //   use: { ...devices['Desktop Firefox'] },
+    // },
+
+    // {
+    //   name: 'webkit',
+    //   use: {
+    //     ...devices['Desktop Safari'],
+    //     headless: false,
+    //     viewport: { width: 1920, height: 1049 },
+    //     screenshot: 'on',
+    //     trace: 'retain-on-failure'
+    //   },
+    // },
+
+    /* Test against branded browsers. */
     {
       name: 'Google-Chrome',
       use: {
@@ -44,16 +67,10 @@ export default defineConfig({
         trace: 'retain-on-failure'
       },
     },
-
     // {
-    //   name: 'firefox',
-    //   use: { ...devices['Desktop Firefox'] },
-    // },
-
-    // {
-    //   name: 'webkit',
-    //   use: { ...devices['Desktop Safari'] },
-    // },
+    //   name: 'Microsoft Edge',
+    //   use: { ...devices['Desktop Edge'], channel: 'msedge' },
+    // }
 
     /* Test against mobile viewports. */
     // {
@@ -63,16 +80,6 @@ export default defineConfig({
     // {
     //   name: 'Mobile Safari',
     //   use: { ...devices['iPhone 12'] },
-    // },
-
-    /* Test against branded browsers. */
-    // {
-    //   name: 'Microsoft Edge',
-    //   use: { ...devices['Desktop Edge'], channel: 'msedge' },
-    // },
-    // {
-    //   name: 'Google Chrome',
-    //   use: { ...devices['Desktop Chrome'], channel: 'chrome' },
     // },
   ],
 
