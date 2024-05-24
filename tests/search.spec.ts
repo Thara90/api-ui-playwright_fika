@@ -25,6 +25,7 @@ test.describe('Search Test Suite', () => {
         token = loginResponseJson.access_token;
         console.log("##########################\n" + token + "\n##########################");
     });
+
     for (const productList of testData.products) {
         test(`Verify searching for ${productList.productName}`, async ({ page }) => {
             await page.goto(`${process.env.WEB_URL}/#/`);
