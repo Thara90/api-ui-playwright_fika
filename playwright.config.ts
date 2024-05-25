@@ -13,8 +13,7 @@ export default defineConfig({
   globalSetup: 'utils/globalSetup.ts',
   testDir: './tests',
   /* Run tests in files in parallel */
-  fullyParallel: true,
-  timeout: 60000,
+  fullyParallel:true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   //forbidOnly: !!process.env.CI,
   /* Retry on CI only */
@@ -24,16 +23,28 @@ export default defineConfig({
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: 'html',
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
+  timeout: 120000,
+  expect: {
+    /**
+     * Maximum time expect() should wait for the condition to be met.
+     * For example in `await expect(locator).toHaveText();`
+     */
+    timeout: 5000
+  },
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
     // baseURL: 'http://127.0.0.1:3000',
-
+    launchOptions: {
+      slowMo: 1000
+    },
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
   },
 
   /* Configure projects for major browsers */
   projects: [
+    // Setup project
+    { name: 'setup', testMatch: /.*\.setup\.ts/ },
 
     // {
     //   name: 'chromium',
@@ -63,10 +74,11 @@ export default defineConfig({
         ...devices['Desktop Chrome'],
         channel: 'chrome',
         headless: false,
-        viewport: { width: 1920, height: 1049 },
+        //viewport: { width: 1920, height: 1049 },
         screenshot: 'on',
-        trace: 'retain-on-failure'
+        trace: 'retain-on-failure',
       },
+      //dependencies: ['setup'],
     },
     // {
     //   name: 'Microsoft Edge',
