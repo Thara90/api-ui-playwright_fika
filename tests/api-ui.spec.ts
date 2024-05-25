@@ -41,7 +41,7 @@ test.describe('Example Test Suite', () => {
         product_price = productDetailsResponseJson.data[0].price;
         console.log("\n" + "##########################\n" + 'product_name : ' + product_name);
         console.log('product_id : ' + product_id);
-        console.log('product_id : ' + product_price + "\n##########################");
+        console.log('product_price : ' + product_price + "\n##########################");
 
         //writting product details into carePayload.json
         cartPayload.product_id = product_id;
@@ -92,6 +92,7 @@ test.describe('Example Test Suite', () => {
         }, '1');
         await page.reload();
         await expect.soft(page.locator('//tbody/tr/td[4]/span[1]')).toContainText(`${product_price}`);
+        await page.waitForTimeout(15000);
         //await page.pause();
     });
 });
