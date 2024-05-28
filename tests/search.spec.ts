@@ -8,22 +8,14 @@ test.describe('Search Test Suite', () => {
     if (process.env.ENV == 'reg') {
         testData = regTestData;
     }
-    test.beforeEach(async () => {
-
-        //Login API
-        const apiContext = await request.newContext();
-        const loginResponse = await apiContext.post(`${process.env.BASE_URL}/users/login`,
-            {
-                data: {
-                    email: `${process.env.USERNAME}`,
-                    password: `${process.env.PASSWORD}`
-                }
-            }
-        )
-        expect(loginResponse.ok()).toBeTruthy();
-        const loginResponseJson = await loginResponse.json();
-        token = loginResponseJson.access_token;
-        console.log("##########################\n" + token + "\n##########################");
+    test.beforeEach(async ({ page }) => {
+        //login
+        await page.goto(`${process.env.WEB_URL}`);
+        await page.locator('[data-test="nav-sign-in"]').click();
+        await page.locator('[data-test="email"]').fill('customer2@practicesoftwaretesting.com');
+        await page.locator('[data-test="password"]').fill('welcome01');
+        await page.locator('[data-test="login-submit"]').click();
+        await page.waitForSelector('[data-test="nav-menu"]');
     });
 
     for (const productList of testData.products) {
