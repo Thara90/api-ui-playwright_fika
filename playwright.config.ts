@@ -22,10 +22,10 @@ export default defineConfig({
   //workers: process.env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: [
-    ['monocart-reporter', {
-      name: "FIKA Test Results",
-      outputFile: './test-results/report.html',
-    }],
+    // ['monocart-reporter', {
+    //   name: "FIKA Test Results",
+    //   outputFile: './test-results/report.html',
+    // }],
     ['html']
   ],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
@@ -41,7 +41,7 @@ export default defineConfig({
     /* Base URL to use in actions like `await page.goto('/')`. */
     // baseURL: 'http://127.0.0.1:3000',
     launchOptions: {
-      slowMo: 1000
+      slowMo: 2000
     },
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
@@ -84,7 +84,7 @@ export default defineConfig({
         screenshot: 'on',
         trace: 'retain-on-failure',
       },
-      dependencies: ['setup'],
+      //dependencies: ['setup'],
     },
     // {
     //   name: 'Microsoft Edge',
