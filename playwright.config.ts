@@ -84,7 +84,7 @@ export default defineConfig({
         screenshot: 'on',
         trace: 'retain-on-failure',
       },
-      //dependencies: ['setup'],
+      dependencies: ['setup'],
     },
     // {
     //   name: 'Microsoft Edge',
