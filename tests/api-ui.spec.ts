@@ -83,16 +83,12 @@ test.describe('Example Test Suite', () => {
         page.addInitScript(value => {
             window.localStorage.setItem('auth-token', value);
         }, token);
-        await page.goto(`${process.env.WEB_URL}/#/checkout`);
         page.addInitScript(value => {
             window.sessionStorage.setItem('cart_id', value);
         }, cartId);
-        // page.addInitScript(value => {
-        //     window.sessionStorage.setItem('cart_quantity', value);
-        // }, '1');
-        await page.reload();
+        await page.goto(`${process.env.WEB_URL}/checkout`);
         await expect.soft(page.locator('//tbody/tr/td[4]/span[1]')).toContainText(`${product_price}`);
-        await page.waitForTimeout(15000);
+        await page.waitForTimeout(10000);
         //await page.pause();
     });
 });
